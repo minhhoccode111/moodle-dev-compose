@@ -1,26 +1,26 @@
-moodle-dev-compose
-------------------
+## moodle-dev-compose
 
 This project is an alternative way to setup Moodle dev environment using Docker. It is close to LAMP approach from configuring perspective - there is only one database server for all instances of Moodle, and instead of several Apache VirtualHost sites, separate webserver container is used for each Moodle instance. This results in having clean host system (no direct installation of service packages) and provides flexibility to mix versions of PHP for different Moodle instances, as well as easily add other services, such as Memcached or SAML.
 
 This setup can co-exist on the same host with [moodle-docker](https://github.com/moodlehq/moodle-docker), which is strongly advised to use for running tests.
 
 ## Features
-* Different virtual hostnames (or virtual paths) for each instance of Moodle.
-* Uses `moodlehq/moodle-php-apache` Moodle HQ maintained images.
-* Shared DB server for all Moodle instances with Phpmyadmin (or Adminer) web UI.
-* Mail server container with web UI.
-* Easy to extend, enable SSL, add other any other services (see [examples](#other-services)).
+
+- Different virtual hostnames (or virtual paths) for each instance of Moodle.
+- Uses `moodlehq/moodle-php-apache` Moodle HQ maintained images.
+- Shared DB server for all Moodle instances with Phpmyadmin (or Adminer) web UI.
+- Mail server container with web UI.
+- Easy to extend, enable SSL, add other any other services (see [examples](#other-services)).
 
 ## Requirements
 
 You will need:
 
-* [Docker](https://docs.docker.com/get-docker/). If you don't need GUI, installing only [Docker engine](https://docs.docker.com/engine/install/) is sufficient, but you need [Docker Compose](https://docs.docker.com/compose/install/) installed separately.
-* Clone of Moodle repo that you want to work on.
-* Make sure you don't run local webserver that is using port 80 (if you need,
+- [Docker](https://docs.docker.com/get-docker/). If you don't need GUI, installing only [Docker engine](https://docs.docker.com/engine/install/) is sufficient, but you need [Docker Compose](https://docs.docker.com/compose/install/) installed separately.
+- Clone of Moodle repo that you want to work on.
+- Make sure you don't run local webserver that is using port 80 (if you need,
   change it to different port or use different port in compose file).
-* Make sure you don't run local mysql/mariadb server that is using port 3306 (if
+- Make sure you don't run local mysql/mariadb server that is using port 3306 (if
   you need, change it to different port or use different port in compose file)
 
 ### Moodle config.php
@@ -120,9 +120,9 @@ their IPs on any container in the set, e.g. you may use `mariadb` in your
 moodle `config.php` as DB hostname.
 
 You may stop the containers using `docker compose stop` or destroy them using
-`docker compose down`. It is safe to desroy as you are using volumes, so next
-time you start them, all data will be in place within newly created
-containers.
+`docker compose down`(or `docker compose down -v` to also remove volumes). It
+is safe to desroy as you are using volumes, so next time you start them, all
+data will be in place within newly created containers.
 
 ### Accessing Moodle
 
@@ -176,6 +176,13 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 MariaDB [(none)]>
 ```
 
+```bash
+CREATE DATABASE `moodle-main` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'moodle'@'%' IDENTIFIED BY 'your_secure_password';
+GRANT ALL PRIVILEGES ON `moodle-main`.* TO 'moodle'@'%';
+FLUSH PRIVILEGES;
+```
+
 #### Postgres
 
 If you prefer Postgres, modify `include` section at the top of `compose.yaml`.
@@ -223,6 +230,7 @@ postgres=#
 ```
 
 Moodle `config.php` would need changes:
+
 ```
 $CFG->dbtype    = 'pgsql';
 $CFG->dbhost    = 'postgres';
@@ -241,6 +249,7 @@ postgres@ea13edb262fb:/$ pg_ctl stop
 ```
 
 Now, when service is gracefully stopped, execute:
+
 ```
 docker run --rm -v pgdata12:/var/lib/postgresql/12/data -v pgdata13:/var/lib/postgresql/13/data tianon/postgres-upgrade:12-to-13
 ```
@@ -248,21 +257,21 @@ docker run --rm -v pgdata12:/var/lib/postgresql/12/data -v pgdata13:/var/lib/pos
 This will perform upgrade. Finally, shut down your dev suit, make necessary changes in
 compose files and start again.
 
-
 ### Receiving mail
 
 We start Mailpit container by default that allows to receive email and provides
 interface to view it.
 
 In Moodle configuration file add:
+
 ```
 $CFG->smtphosts = 'mail:1025'
 ```
 
 Web interface to view emails is available at `http://moodle.local:8025`
 
-
 ## Adding PHP extensions
+
 ### Profiling
 
 You can add Xhprof extension and use Moodle built-in profiling tool.
@@ -283,6 +292,7 @@ xhprof.output_dir => no value => no value
 xhprof.sampling_depth => 0x7fffffff => 0x7fffffff
 xhprof.sampling_interval => 100000 => 100000
 ```
+
 Xhprof extension has been installed and enabled, restart the web container.
 
 ```bash
@@ -331,6 +341,7 @@ This will bring a new container into play on the next `docker compose up` run.
 
 Note: if you prefer not to use `include` section in `compose.yaml`, alternative way to use many config
 files is:
+
 ```bash
 > docker compose -f compose.yaml -f compose.local.yaml up
 ```
@@ -384,6 +395,7 @@ and in the service that you need to make accesible over `https`, add `CERT_NAME`
 ```
 
 Also in Moodle config make sure `wwwroot` reflects correct protocol:
+
 ```
 $CFG->wwwroot   = 'https://moodle.local';
 $CFG->sslproxy  = true;
