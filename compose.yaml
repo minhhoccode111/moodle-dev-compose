@@ -1,7 +1,7 @@
 include:
-  - mariadb.service.yaml
-#  - postgres.service.yaml
-#  - compose.local.yaml
+  # - mariadb.service.yaml
+  # - postgres.service.yaml
+  # - compose.local.yaml
 
 services:
     nginx-proxy:
@@ -18,18 +18,18 @@ services:
         volumes:
           - moodledata:/var/www/moodledata
           - $MOODLE_DOCKER_WWWROOT:/var/www/html
-        depends_on:
-          - mariadb
+        # depends_on:
+        #   - mariadb
         environment:
           - VIRTUAL_HOST=moodle.local
         networks:
           - devbox
-    mail:
-        image: axllent/mailpit:latest
-        ports:
-          - 8025:8025
-        networks:
-          - devbox
+    # mail:
+    #     image: axllent/mailpit:latest
+    #     ports:
+    #       - 8025:8025
+    #     networks:
+    #       - devbox
 volumes:
     moodledata:
         name: "moodledata"
