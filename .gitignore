@@ -2,3 +2,22 @@
 *local.yaml
 certs/
 saml2/
+
+\.idea/
+#/config\.php
+/*.log
+/*.txt
+\.log
+\.txt
+\.idea/*
+
+node_modules/
+vendor/
+# Xdebug install inside docker container will appear outside host machine
+# because of those lines in docker-compose.yml
+# volumes:
+#   - moodledata:/var/www/moodledata
+#   - $MOODLE_DOCKER_WWWROOT:/var/www/html
+# so be we have to ignore those
+xdebug-*
+package.xml

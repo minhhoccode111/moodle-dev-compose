@@ -1,0 +1,83 @@
+# include:
+#  - mariadb.service.yaml
+#  - postgres.service.yaml
+#  - compose.local.yaml
+
+services:
+    nginx-proxy:
+        image: nginxproxy/nginx-proxy
+        ports:
+          - "80:80"
+        volumes:
+          - /var/run/docker.sock:/tmp/docker.sock:ro
+          - ./nginx_proxy.conf:/etc/nginx/conf.d/nginx_proxy.conf:ro
+        networks:
+          - devbox
+    moodle:
+        build:
+          context: .
+          dockerfile: ./Dockerfile
+        # ports:
+          # port for xdebug, no need docker to handle port forwarding
+          # - "9000:9000"
+        volumes:
+          - moodledata:/var/www/moodledata
+          # NOTE: location of moodle repo on your local machine (like `/home/mhc/work/moodle`)
+          - $MOODLE_DOCKER_WWWROOT:/var/www/html
+        depends_on:
+          - redis
+        #   - mariadb
+        environment:
+          - VIRTUAL_HOST=localhost
+        networks:
+          - devbox
+    # NOTE: turn on if we want to develop moodle with local database
+    # mariadb:
+    #     image: mariadb:10.11
+    #     environment:
+    #       - MYSQL_ROOT_PASSWORD=root
+    #       - MYSQL_USER=moodle
+    #       - MYSQL_PASSWORD=moodle
+    #     volumes:
+    #       - mysqldata:/var/lib/mysql
+    #     ports:
+    #       - 3306:3306
+    #     networks:
+    #       - devbox
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+          - PMA_HOST=192.168.50.152
+          - UPLOAD_LIMIT=256M
+        # depends_on:
+        #   - mariadb
+        ports:
+          - 8081:80
+        networks:
+          - devbox
+    redis:
+        image: redis:7
+        ports:
+          - "6379:6379"
+        networks:
+          - devbox
+    # mail:
+    #     image: axllent/mailpit:latest
+    #     ports:
+    #       - 8025:8025
+    #     networks:
+    #       - devbox
+
+volumes:
+    moodledata:
+        name: "moodledata"
+    mysqldata:
+        name: "mysqldata"
+
+networks:
+  devbox:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.31.0.0/16
