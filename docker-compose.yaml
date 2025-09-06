@@ -28,7 +28,7 @@ services:
           - redis
         #   - mariadb
         environment:
-          - VIRTUAL_HOST=localhost
+          - VIRTUAL_HOST=moodle.local
         networks:
           - devbox
     # NOTE: turn on if we want to develop moodle with local database

@@ -25,4 +25,3 @@ RUN apt update && apt install -y \
 # with
 # xdebug.remote_host=host.docker.internal\n\
 # to work on macOS and Windows
-
