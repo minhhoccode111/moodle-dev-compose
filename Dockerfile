@@ -24,6 +24,8 @@ RUN apt update && apt install -y \
     > /usr/local/etc/php/conf.d/xdebug.ini \
     && rm -rf xdebug-2.9.8*
 
+RUN echo "upload_max_filesize = 1G\\npost_max_size = 1G" > /usr/local/etc/php/conf.d/uploads.ini
+
 # replace line (this line work on my linux ubuntu with docker compose)
 # xdebug.remote_host=172.17.0.1\n\
 # with
