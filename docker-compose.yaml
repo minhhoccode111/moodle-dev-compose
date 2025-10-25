@@ -64,16 +64,17 @@ services:
         networks:
           - devbox
     # if we want to run tmsapi locally
-    # tmsapi:
-    #   build:
-    #     context: $TMS_API_DIR
-    #     dockerfile: Dockerfile
-    #   ports:
-    #     # from host machine access http://localhost:5137
-    #     # from inside moodle container access http://tmsapi:80
-    #     - "5137:80"
-    #   networks:
-    #    - devbox
+    tmsapi:
+      profiles: ["tms"]
+      build:
+        context: $TMS_API_DIR
+        dockerfile: Dockerfile
+      ports:
+        # from host machine access http://localhost:5137
+        # from inside moodle container access http://tmsapi:80
+        - "5137:80"
+      networks:
+        - devbox
     # mail:
     #     image: axllent/mailpit:latest
     #     ports:
