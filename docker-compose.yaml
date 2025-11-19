@@ -24,8 +24,8 @@ services:
           - moodledata:/var/www/moodledata
           # NOTE: location of moodle repo on your local machine (like `/home/mhc/work/moodle`)
           - $MOODLE_DOCKER_WWWROOT:/var/www/html
-        depends_on:
-          - redis
+        # depends_on:
+        #   - redis
         #   - mariadb
         environment:
           - VIRTUAL_HOST=localhost
