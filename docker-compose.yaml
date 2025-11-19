@@ -28,7 +28,7 @@ services:
         #   - redis
         #   - mariadb
         environment:
-          - VIRTUAL_HOST=localhost
+          - VIRTUAL_HOST=192.168.50.152
         networks:
           - devbox
         extra_hosts:
