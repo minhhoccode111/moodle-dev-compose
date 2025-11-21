@@ -4,16 +4,18 @@
 #  - compose.local.yaml
 
 services:
-    nginx-proxy:
-        image: nginxproxy/nginx-proxy
+    # nginx-proxy:
+    #     image: nginxproxy/nginx-proxy
+    #     ports:
+    #       - "8020:80"
+    #     volumes:
+    #       - /var/run/docker.sock:/tmp/docker.sock:ro
+    #       - ./nginx_proxy.conf:/etc/nginx/conf.d/nginx_proxy.conf:ro
+    #     networks:
+    #       - devbox
+    moodle:
         ports:
           - "8020:80"
-        volumes:
-          - /var/run/docker.sock:/tmp/docker.sock:ro
-          - ./nginx_proxy.conf:/etc/nginx/conf.d/nginx_proxy.conf:ro
-        networks:
-          - devbox
-    moodle:
         build:
           context: .
           dockerfile: ./Dockerfile
@@ -27,8 +29,8 @@ services:
         # depends_on:
         #   - redis
         #   - mariadb
-        environment:
-          - VIRTUAL_HOST=192.168.50.152
+        environment: []
+          # - VIRTUAL_HOST=192.168.50.152
         networks:
           - devbox
         extra_hosts:
