@@ -30,7 +30,7 @@ services:
           - redis
         #   - mariadb
         environment:
-          - VIRTUAL_HOST=localhost
+          - VIRTUAL_HOST=moodle.local
           - CERT_NAME=localhost
         networks:
           - devbox
