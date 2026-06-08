@@ -10,7 +10,7 @@ FROM moodlehq/moodle-php-apache:8.3
 # xdebug.log=/tmp/xdebug.log" \
 #     > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-RUN echo "upload_max_filesize = 2G\npost_max_size = 2G" > /usr/local/etc/php/conf.d/uploads.ini
+RUN echo "upload_max_filesize = 2G\npost_max_size = 2G\nmax_execution_time = 3600\nmemory_limit = 2048M" > /usr/local/etc/php/conf.d/uploads.ini
 
 # replace line (this line work on my linux ubuntu with docker compose)
 # xdebug.remote_host=172.17.0.1\n\
