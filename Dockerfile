@@ -1,19 +1,3 @@
-FROM moodlehq/moodle-php-apache:8.3
-
-# # Enable and configure Xdebug
-# RUN echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20230831/xdebug.so\n\
-# xdebug.mode=debug\n\
-# xdebug.start_with_request=yes\n\
-# xdebug.client_host=host.docker.internal\n\
-# xdebug.client_port=9003\n\
-# xdebug.idekey=VSCODE\n\
-# xdebug.log=/tmp/xdebug.log" \
-#     > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+FROM moodlehq/moodle-php-apache:7.2
 
 RUN echo "upload_max_filesize = 2G\npost_max_size = 2G\nmax_execution_time = 3600\nmemory_limit = 2048M" > /usr/local/etc/php/conf.d/uploads.ini
-
-# replace line (this line work on my linux ubuntu with docker compose)
-# xdebug.remote_host=172.17.0.1\n\
-# with
-# xdebug.remote_host=host.docker.internal\n\
-# to work on macOS and Windows
